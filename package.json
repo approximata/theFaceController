@@ -1,0 +1,28 @@
+{
+  "name": "thefacecontroller",
+  "version": "1.0.0",
+  "description": "simple face recognation web app",
+  "main": "script.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/approximata/theFaceController.git"
+  },
+  "keywords": [
+    "realeyes"
+  ],
+  "author": "kbm",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/approximata/theFaceController/issues"
+  },
+  "homepage": "https://github.com/approximata/theFaceController#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "multer": "^1.3.0",
+    "webrtc-adapter": "^4.0.0"
+  }
+}

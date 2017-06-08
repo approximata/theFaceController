@@ -1,0 +1,12 @@
+:root{
+  --non-capable-display: none;
+  --camera-denied-diplay: none;
+}
+
+.non-capable {
+  display: var(--non-capable-display);
+}
+
+.camera-denied {
+  display: var(--camera-denied-diplay);
+}

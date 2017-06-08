@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>The Face Controller</title>
+  </head>
+  <body cz-shortcut-listen="true">
+    <h1>Realeyes homework</h1>
+    <div class="non-capable">
+      <p>Please use Firefox or Chrome and be equipped by a webcam!</p>
+    </div>
+    <div class="capable">
+      <div class="camera-denied">
+        <h2>To continue exercise please refresh the page and allow your webcam!</h2>
+      </div>
+      <div class="camera-allowed">
+        <div class="video">
+          <video height="180" id="video" width="320" autoplay></video>
+          <button class="captureBtn">Recognize</button>
+          <canvas height="180" id="canvas" width="320"></canvas>
+        </div>
+        <div class="capture">
+          <div class="analyzisWrapper">
+            <h1>Analyzis</h1>
+            <pre class="analyzis">Analyzis result should show up here...</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://codesdwncdn.realeyesit.com/environment-checker/release/2/Realeyesit.EnvironmentalDetectionAPI.js"></script>
+  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  <script src="script.js"></script>
+</html>
