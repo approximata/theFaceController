@@ -20,9 +20,13 @@
   },
   "homepage": "https://github.com/approximata/theFaceController#readme",
   "dependencies": {
+    "aws-sdk": "^2.67.0",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "fs-extra": "^3.0.1",
     "multer": "^1.3.0",
+    "node-uuid": "^1.4.8",
+    "uuid": "^3.0.1",
     "webrtc-adapter": "^4.0.0"
   }
 }

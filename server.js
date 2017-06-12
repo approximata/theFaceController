@@ -2,17 +2,59 @@
 
 var express = require('express');
 var multer  = require('multer');
+var AWS = require('aws-sdk');
+// var rekRequest = require('./rekognition');
+var fs = require('fs-extra');
 var app = express();
 
 app.use(express.static('client')); // for serving the HTML file
 
-var upload = multer({ dest: __dirname + '/public/uploads/' });
-var type = upload.single('upl');
+var storage = multer.diskStorage(
+  {
+    destination: function (req, file, cb) {
+      cb(null, './public/uploads')
+    },
+    filename: function (req, file, cb) {
+      cb(null, 'thePic.jpg')
+    }
+  },
+);
+
+var upload = multer({ storage: storage });
+var type = upload.single('blob');
+var rekognition = new AWS.Rekognition({region: 'eu-west-1'});
 
 app.post('/api/test', type, function (req, res) {
-   console.log(req.body);
-   console.log(req.file);
-   // do stuff with file
+  console.log(req.file);
+  var bitmap = fs.readFileSync(req.file.path);
+  rekognition.detectFaces(
+    {
+     "Attributes": [ 'ALL' ],
+     "Image": {
+        "Bytes": bitmap,
+     }
+   }, function(err, data) {
+			if (err) {
+				console.log(err, err.stack);
+        res.send(err)// an error occurred
+			} else {
+        console.log('api working');
+        console.log(data);
+        if (data.FaceDetails.length > 0)
+        {
+          console.log(data.FaceDetails);
+          res.json(data.FaceDetails);
+        }
+        else
+        {
+          console.log('nincs arc');
+				 res.json({status: 'no face'});
+			  }
+			}
+		});
+  // res.end('uploaded')
 });
 
-app.listen(3000);
+app.listen(3000,function(){
+  console.log("Started on PORT 3000");
+})
