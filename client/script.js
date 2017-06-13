@@ -2,23 +2,56 @@
 
 var video = document.querySelector('video');
 var canvas = window.canvas = document.querySelector('canvas');
+var ctx = canvas.getContext('2d')
 var button = document.querySelector('button');
+var analyzis = document.querySelector('.analyzis')
 var theImg;
 var theBlob;
 var response;
+var boundingBox = {
+  'x': 0,
+  'y': 0,
+  'width': 0,
+  'height': 0
+}
+
+console.log(boundingBox.x);
 
 var analyzis = document.querySelector('.analyzis');
 
-function showData(data){
+function drawFace(data){
   for(var face in data){
-    console.log(data[face].BoundingBox);
-    var faceKeys = Object.keys(data[face]);
-    console.log(faceKeys);
-    for(var key in faceKeys){
-        console.log(faceKeys[key]);
-        // console.log(data[face].faceKeys[key].replace(/"/g, ""));
-    }
+    boundingBox.x = data[face].BoundingBox.Left * canvas.width;
+    boundingBox.y = data[face].BoundingBox.Top * canvas.height;
+    boundingBox.width =  data[face].BoundingBox.Width * canvas.width;
+    boundingBox.height = data[face].BoundingBox.Height * canvas.height;
+    ctx.font = '15px Arial';
+    ctx.fillStyle = 'green';
+    ctx.rect(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
+    ctx.fillText(face, boundingBox.x, boundingBox.y - 5);
+    ctx.strokeStyle='green';
+    ctx.stroke();
+    console.log(boundingBox);
   }
+}
+
+function showData(data){
+  if(data.status || data.message){
+    analyzis.innerHTML = data.status || data.message;
+    return;
+  };
+  analyzis.innerHTML = '';
+  var numberOfFaces = data.length;
+  analyzis.innerHTML += 'Faces: ' + numberOfFaces +"\n" +
+  '---------------------' + "\n"
+
+  for(var face in data){
+    analyzis.innerHTML +=
+    'face: ' + face + "\n"+
+    'gender: ' + data[face].Gender.Value + "\n"+
+    'ageRange: ' + data[face].AgeRange.Low + ' - ' + data[face].AgeRange.High + "\n"
+    + '---------------------' + "\n"
+    }
 }
 
 function environmentalDetectionCallback(result) {
@@ -49,19 +82,6 @@ function fetchBlob(){
   var fd = new FormData();
   fd.append('blob', theBlob);
 
-//   fetch('/api/test',
-//   {
-//       method: 'post',
-//       body: fd
-//   }).then(function(res)
-//   {
-//     console.log(res)
-//     response = res.json()
-//     console.log(response);
-//
-//   })
-// .catch(function(res){ console.log('catch' + res) })
-
   fetch('/api/test',
       {
         method: 'post',
@@ -78,14 +98,17 @@ function fetchBlob(){
           console.log('success!', json);
           response = json;
           showData(response);
+          drawFace(response);
+
           // or return the message to seperate the processing for a followup .then()
           // return json.message;
       })
       .catch(function(ex) {
           console.log('Unhandled Error! ', ex);
       });
-
 }
+
+
 
 function dataURItoBlob(dataURI) {
   var byteString = atob(dataURI.split(',')[1]);
@@ -115,13 +138,13 @@ function handleError(error) {
 navigator.mediaDevices.getUserMedia(constraints).
     then(handleSuccess).catch(handleError);
 
-    button.onclick = function() {
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext('2d').
-      drawImage(video, 0, 0, canvas.width, canvas.height);
-      theImg = canvas.toDataURL('image/jpeg', 1.0);
-      theBlob = dataURItoBlob(theImg);
-      canvas.toBlob(function(blob){}, "image/jpeg", 0.75)
-      fetchBlob();
-    };
+
+button.onclick = function() {
+  canvas.width = video.videoWidth * (video.height/video.videoHeight);
+  canvas.height = video.height;
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  theImg = canvas.toDataURL('image/jpeg', 1.0);
+  theBlob = dataURItoBlob(theImg);
+  canvas.toBlob(function(blob){}, "image/jpeg", 1.0)
+  fetchBlob();
+};

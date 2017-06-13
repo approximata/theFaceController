@@ -38,17 +38,14 @@ app.post('/api/test', type, function (req, res) {
 				console.log(err, err.stack);
         res.send(err)// an error occurred
 			} else {
-        console.log('api working');
-        console.log(data);
+
         if (data.FaceDetails.length > 0)
         {
-          console.log(data.FaceDetails);
           res.json(data.FaceDetails);
         }
         else
         {
-          console.log('nincs arc');
-				 res.json({status: 'no face'});
+				 res.json({status: 'no face detected'});
 			  }
 			}
 		});
