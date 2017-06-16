@@ -1,6 +1,8 @@
 :root{
   --non-capable-display: none;
   --camera-denied-diplay: none;
+  --analyzisWrapper-display:block;
+  --error-display:none;
 }
 
 .non-capable {
@@ -9,4 +11,12 @@
 
 .camera-denied {
   display: var(--camera-denied-diplay);
+}
+
+.analyzisWrapper {
+  display: var(--analyzisWrapper-display);
+}
+
+.error {
+  display: var(--error-display);
 }

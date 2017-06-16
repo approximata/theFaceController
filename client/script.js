@@ -35,7 +35,7 @@ function drawFace(data){
   }
 }
 
-function showData(data){
+function showData (data) {
   if(data.status || data.message){
     analyzis.innerHTML = data.status || data.message;
     return;
@@ -107,8 +107,6 @@ function fetchBlob(){
           console.log('Unhandled Error! ', ex);
       });
 }
-
-
 
 function dataURItoBlob(dataURI) {
   var byteString = atob(dataURI.split(',')[1]);

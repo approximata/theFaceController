@@ -4,7 +4,8 @@
   "description": "simple face recognation web app",
   "main": "script.js",
   "scripts": {
-    "test": "test.js"
+    "test": "test.js",
+    "babel": "browserify --presets es2015 ./client/src/main.js -o client/build/main.bundle.js"
   },
   "repository": {
     "type": "git",
@@ -28,5 +29,19 @@
     "node-uuid": "^1.4.8",
     "uuid": "^3.0.1",
     "webrtc-adapter": "^4.0.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-env": "^1.5.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^7.3.0",
+    "browserify": "^14.4.0",
+    "eslint": "^4.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
   }
 }

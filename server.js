@@ -1,13 +1,19 @@
 'use strict';
 
-var express = require('express');
-var multer  = require('multer');
-var AWS = require('aws-sdk');
+var express = require('express')
+var multer = require('multer')
+var AWS = require('aws-sdk')
 // var rekRequest = require('./rekognition');
 var fs = require('fs-extra');
+var browserify = require('browserify')
+browserify(['./client/src/main.js'])
+  .transform('babelify', {presets: ['es2015']})
+  .bundle()
+  .pipe(fs.createWriteStream('client/src/build/bundle.js'))
+
 var app = express();
 
-app.use(express.static('client')); // for serving the HTML file
+app.use(express.static('client'))
 
 var storage = multer.diskStorage(
   {
