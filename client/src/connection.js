@@ -4,7 +4,7 @@ export function connectApi (callback, blob) {
   const fd = new FormData()
   fd.append('blob', blob)
 
-  fetch('/api/test',
+  fetch('/api/rekognition',
     {
       method: 'post',
       body: fd
@@ -12,13 +12,11 @@ export function connectApi (callback, blob) {
     .then(response => Promise.all([response, response.json()]))
     .then(([response, json]) => {
       if (response.status < 200 || response.status >= 300) {
-        const error = new Error(json.message);
+        const error = new Error(json.message)
         error.response = response
         throw error
       }
-      console.log('success!', json)
-      response = json
-      callback(response)
+      callback(json)
     })
     .catch(function (ex) {
       console.log('Unhandled Error! ', ex)

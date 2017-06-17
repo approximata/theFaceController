@@ -23,7 +23,7 @@ function connectApi(callback, blob) {
   var fd = new FormData();
   fd.append('blob', blob);
 
-  fetch('/api/test', {
+  fetch('/api/rekognition', {
     method: 'post',
     body: fd
   }).then(function (response) {
@@ -38,9 +38,7 @@ function connectApi(callback, blob) {
       error.response = response;
       throw error;
     }
-    console.log('success!', json);
-    response = json;
-    callback(response);
+    callback(json);
   }).catch(function (ex) {
     console.log('Unhandled Error! ', ex);
   });
@@ -187,20 +185,8 @@ function isErrorInApi(data) {
 function showAnalyzis(data) {
   _domElement.analyzisWrapper.style.display = 'block';
   _domElement.errorWrapper.style.display = 'none';
-  if (data.status) {
-    _domElement.analyzis.innerHTML = data.status;
-    return;
-  }
   _domElement.analyzis.innerHTML = '';
-  // for (var face in data) {
-  //   analyzis.innerHTML +=
-  //   'face: ' + face + '\n' +
-  //   'gender: ' + data[face].Gender.Value + '\n' +
-  //   'ageRange: ' + data[face].AgeRange.Low + ' - ' + data[face].AgeRange.High + '\n' +
-  //   '---------------------' + '\n'
-  // }
   Object.keys(data).forEach(function (face) {
-    console.log(data[face]);
     _domElement.analyzis.innerHTML += 'face: ' + face + '\n' + 'gender: ' + data[face].Gender.Value + '\n' + 'ageRange: ' + data[face].AgeRange.Low + ' - ' + data[face].AgeRange.High + '\n' + '---------------------' + '\n';
   });
 }
@@ -235,10 +221,13 @@ function showError(data) {
 function showResponse(data) {
   var response = data;
   var error = isErrorInApi(response);
-  console.log(error);
   if (!error) {
-    showAnalyzis(response);
-    showFaces(response);
+    if (data.noface) {
+      _domElement.analyzis.innerHTML = data.noface;
+    } else {
+      showAnalyzis(response);
+      showFaces(response);
+    }
   } else {
     showError(response);
   }

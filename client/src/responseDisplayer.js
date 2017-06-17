@@ -9,10 +9,6 @@ function isErrorInApi (data) {
 function showAnalyzis (data) {
   analyzisWrapper.style.display = 'block'
   errorWrapper.style.display = 'none'
-  if (data.status) {
-    analyzis.innerHTML = data.status
-    return
-  }
   analyzis.innerHTML = ''
   Object.keys(data).forEach((face) => {
     analyzis.innerHTML +=
@@ -53,10 +49,14 @@ function showError (data) {
 export function showResponse (data) {
   const response = data
   const error = isErrorInApi(response)
-  console.log(error)
   if (!error) {
-    showAnalyzis(response)
-    showFaces(response)
+    if (data.noface) {
+      analyzis.innerHTML = data.noface
+    }
+    else {
+      showAnalyzis(response)
+      showFaces(response)
+    }
   }
   else {
     showError(response)
