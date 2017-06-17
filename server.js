@@ -4,13 +4,12 @@ const multer = require('multer')
 const AWS = require('aws-sdk')
 const fs = require('fs-extra')
 const browserify = require('browserify')
-const babelify = require('babelify')
 const port = process.env.PORT || 3000
 
-browserify(['client/src/main.js'])
-  .transform('babelify', {presets: ['es2015']})
-  .bundle()
-  .pipe(fs.createWriteStream('client/src/build/bundle.js'))
+// browserify(['client/src/main.js'])
+//   .transform('babelify', {presets: ['es2015']})
+//   .bundle()
+//   .pipe(fs.createWriteStream('client/src/build/bundle.js'))
 
 const app = express()
 
