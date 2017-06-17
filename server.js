@@ -4,6 +4,7 @@ const multer = require('multer')
 const AWS = require('aws-sdk')
 const fs = require('fs-extra')
 const browserify = require('browserify')
+const babelify = require('babelify')
 const port = process.env.PORT || 3000
 
 browserify(['client/src/main.js'])
@@ -65,6 +66,6 @@ app.listen(port, (error) => {
     console.error(error)
   }
   else {
-    console.info('==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port)
+    console.info('==> 🌎  Listening on port %s.', port)
   }
 })
