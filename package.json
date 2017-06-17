@@ -44,6 +44,9 @@
     "uuid": "^3.0.1",
     "webrtc-adapter": "^4.0.0"
   },
+  "engines": {
+    "node": "8.0"
+  },
   "devDependencies": {
     "ava": "^0.19.1",
     "babel-register": "^6.24.1",
