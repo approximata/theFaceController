@@ -1,6 +1,6 @@
 'use strict'
 
-export default function apiConnection (callback, blob) {
+export function connectApi (callback, blob) {
   const fd = new FormData()
   fd.append('blob', blob)
 
