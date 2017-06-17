@@ -1,4 +1,3 @@
-'use strict'
 
 const express = require('express')
 const multer = require('multer')
@@ -29,7 +28,11 @@ const storage = multer.diskStorage(
 
 const upload = multer({ storage: storage })
 const type = upload.single('blob')
-const rekognition = new AWS.Rekognition({region: 'eu-west-1'})
+const rekognition = new AWS.Rekognition({
+  region: 'eu-west-1',
+  accessKeyId: process.env.S3_KEY,
+  secretAccessKey: process.env.S3_SECRET
+})
 
 app.post('/api/rekognition', type, (req, res) => {
   const bitmap = fs.readFileSync(req.file.path)
