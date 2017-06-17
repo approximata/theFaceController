@@ -134,8 +134,7 @@ function handleError(error) {
 }
 
 navigator.mediaDevices.getUserMedia(constraints).
-    then(handleSuccess).catch(handleError);
-
+  then(handleSuccess).catch(handleError)
 
 button.onclick = function() {
   canvas.width = video.videoWidth * (video.height/video.videoHeight);
@@ -143,6 +142,6 @@ button.onclick = function() {
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   theImg = canvas.toDataURL('image/jpeg', 1.0);
   theBlob = dataURItoBlob(theImg);
-  canvas.toBlob(function(blob){}, "image/jpeg", 1.0)
+  // canvas.toBlob(function(blob){}, "image/jpeg", 1.0)
   fetchBlob();
 };

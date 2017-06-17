@@ -1,17 +1,20 @@
 :root{
-  --non-capable-display: none;
-  --camera-denied-diplay: none;
   --analyzisWrapper-display:block;
   --error-display:none;
 }
 
 .non-capable {
-  display: var(--non-capable-display);
 }
 
 .camera-denied {
-  display: var(--camera-denied-diplay);
+  display: none
 }
+
+.camera-allowed {
+  display: none
+}
+
+
 
 .analyzisWrapper {
   display: var(--analyzisWrapper-display);

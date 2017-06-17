@@ -1,8 +1,8 @@
 'use strict'
 
-export default function apiConnection (callback) {
-  const fd = new FormData();
-  fd.append('blob', theBlob);
+export default function apiConnection (callback, blob) {
+  const fd = new FormData()
+  fd.append('blob', blob)
 
   fetch('/api/test',
     {
@@ -13,14 +13,14 @@ export default function apiConnection (callback) {
     .then(([response, json]) => {
       if (response.status < 200 || response.status >= 300) {
         const error = new Error(json.message);
-        error.response = response;
-        throw error;
+        error.response = response
+        throw error
       }
-      console.log('success!', json);
-      response = json;
+      console.log('success!', json)
+      response = json
       callback(response)
     })
     .catch(function (ex) {
-      console.log('Unhandled Error! ', ex);
-    });
+      console.log('Unhandled Error! ', ex)
+    })
 }

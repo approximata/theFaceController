@@ -6,12 +6,12 @@ var AWS = require('aws-sdk')
 // var rekRequest = require('./rekognition');
 var fs = require('fs-extra');
 var browserify = require('browserify')
-browserify(['./client/src/main.js'])
+browserify(['client/src/main.js'])
   .transform('babelify', {presets: ['es2015']})
   .bundle()
   .pipe(fs.createWriteStream('client/src/build/bundle.js'))
 
-var app = express();
+var app = express()
 
 app.use(express.static('client'))
 
