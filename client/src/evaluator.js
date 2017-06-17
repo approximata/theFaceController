@@ -1,6 +1,6 @@
 'use strict'
 
-function evaluateResult (isShow, dom) {
+export function evaluateResult (isShow, dom) {
   if (isShow) {
     dom.style.display = 'block'
   }
@@ -29,18 +29,3 @@ export function handleError (error) {
   console.log('navigator.getUserMedia error: ', error)
   userNotAllowedCamera(error)
 }
-
-// function isErrorInApi (data) {
-//   return data.message > 0
-// }
-//
-// function showAnalyzisOrError (data) {
-//   if (!isErrorInApi(data)) {
-//     style.setProperty(`--analyzis-display`, 'block');
-//     style.setProperty(`--error-display`, 'none');
-//   }
-//   else {
-//     style.setProperty(`--analyzis-display`, 'none');
-//     style.setProperty(`--error-display`, 'block');
-//   }
-// }

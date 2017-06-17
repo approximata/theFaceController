@@ -1,7 +1,3 @@
-:root{
-  --analyzisWrapper-display:block;
-  --error-display:none;
-}
 
 .non-capable {
 }
@@ -14,12 +10,10 @@
   display: none
 }
 
-
-
-.analyzisWrapper {
-  display: var(--analyzisWrapper-display);
+.analyzis-wrapper {
+  display: none;
 }
 
-.error {
-  display: var(--error-display);
+.error-wrapper {
+  display: none;
 }

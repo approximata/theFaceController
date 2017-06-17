@@ -72,8 +72,14 @@ Object.defineProperty(exports, "__esModule", {
 var video = exports.video = document.querySelector('video');
 var canvas = exports.canvas = window.canvas = document.querySelector('canvas');
 var ctx = exports.ctx = canvas.getContext('2d');
-var analyzis = exports.analyzis = document.querySelector('.analyzis');
+
 var button = exports.button = document.querySelector('button');
+
+var analyzisWrapper = exports.analyzisWrapper = document.querySelector('.analyzis-wrapper');
+var analyzis = exports.analyzis = document.querySelector('.analyzis');
+
+var errorWrapper = exports.errorWrapper = document.querySelector('.error-wrapper');
+var error = exports.error = document.querySelector('.error');
 
 },{}],5:[function(require,module,exports){
 'use strict';
@@ -81,6 +87,7 @@ var button = exports.button = document.querySelector('button');
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.evaluateResult = evaluateResult;
 exports.evaluateEnviroment = evaluateEnviroment;
 exports.handleSuccess = handleSuccess;
 exports.handleError = handleError;
@@ -113,21 +120,6 @@ function handleError(error) {
   userNotAllowedCamera(error);
 }
 
-// function isErrorInApi (data) {
-//   return data.message > 0
-// }
-//
-// function showAnalyzisOrError (data) {
-//   if (!isErrorInApi(data)) {
-//     style.setProperty(`--analyzis-display`, 'block');
-//     style.setProperty(`--error-display`, 'none');
-//   }
-//   else {
-//     style.setProperty(`--analyzis-display`, 'none');
-//     style.setProperty(`--error-display`, 'block');
-//   }
-// }
-
 },{}],6:[function(require,module,exports){
 'use strict';
 
@@ -141,7 +133,7 @@ var _photoCreator = require('./photoCreator.js');
 
 var _converter = require('./converter.js');
 
-var _resultDisplayer = require('./resultDisplayer.js');
+var _responseDisplayer = require('./responseDisplayer.js');
 
 var _connection = require('./connection.js');
 
@@ -153,11 +145,11 @@ var _domElement = require('./domElement.js');
 _domElement.button.onclick = function () {
   (0, _photoCreator.takeSnapshout)();
   var img = (0, _photoCreator.createImg)();
-  var theBlob = (0, _converter.dataURItoBlob)(img);
-  (0, _connection.connectApi)(_resultDisplayer.showData, theBlob);
+  var blob = (0, _converter.dataURItoBlob)(img);
+  (0, _connection.connectApi)(_responseDisplayer.showResponse, blob);
 };
 
-},{"./config.js":1,"./connection.js":2,"./converter.js":3,"./domElement.js":4,"./evaluator.js":5,"./photoCreator.js":7,"./resultDisplayer.js":8,"./setupEnviroment.js":9}],7:[function(require,module,exports){
+},{"./config.js":1,"./connection.js":2,"./converter.js":3,"./domElement.js":4,"./evaluator.js":5,"./photoCreator.js":7,"./responseDisplayer.js":8,"./setupEnviroment.js":9}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -184,21 +176,71 @@ function createImg() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.showData = showData;
+exports.showResponse = showResponse;
 
 var _domElement = require('./domElement.js');
 
-function showData(data) {
-  if (data.status || data.message) {
-    _domElement.analyzis.innerHTML = data.status || data.message;
-    return;
-  };
-  _domElement.analyzis.innerHTML = '';
-  var numberOfFaces = data.length;
-  _domElement.analyzis.innerHTML += 'Faces: ' + numberOfFaces + "\n" + '---------------------' + "\n";
+function isErrorInApi(data) {
+  return data.message !== undefined;
+}
 
-  for (var face in data) {
-    _domElement.analyzis.innerHTML += 'face: ' + face + "\n" + 'gender: ' + data[face].Gender.Value + "\n" + 'ageRange: ' + data[face].AgeRange.Low + ' - ' + data[face].AgeRange.High + "\n" + '---------------------' + "\n";
+function showAnalyzis(data) {
+  _domElement.analyzisWrapper.style.display = 'block';
+  _domElement.errorWrapper.style.display = 'none';
+  if (data.status) {
+    _domElement.analyzis.innerHTML = data.status;
+    return;
+  }
+  _domElement.analyzis.innerHTML = '';
+  // for (var face in data) {
+  //   analyzis.innerHTML +=
+  //   'face: ' + face + '\n' +
+  //   'gender: ' + data[face].Gender.Value + '\n' +
+  //   'ageRange: ' + data[face].AgeRange.Low + ' - ' + data[face].AgeRange.High + '\n' +
+  //   '---------------------' + '\n'
+  // }
+  Object.keys(data).forEach(function (face) {
+    console.log(data[face]);
+    _domElement.analyzis.innerHTML += 'face: ' + face + '\n' + 'gender: ' + data[face].Gender.Value + '\n' + 'ageRange: ' + data[face].AgeRange.Low + ' - ' + data[face].AgeRange.High + '\n' + '---------------------' + '\n';
+  });
+}
+
+function showFaces(data) {
+  var boundingBox = {
+    'x': 0,
+    'y': 0,
+    'width': 0,
+    'height': 0
+  };
+  Object.keys(data).forEach(function (face) {
+    boundingBox.x = data[face].BoundingBox.Left * _domElement.canvas.width;
+    boundingBox.y = data[face].BoundingBox.Top * _domElement.canvas.height;
+    boundingBox.width = data[face].BoundingBox.Width * _domElement.canvas.width;
+    boundingBox.height = data[face].BoundingBox.Height * _domElement.canvas.height;
+    _domElement.ctx.font = '15px Arial';
+    _domElement.ctx.fillStyle = 'green';
+    _domElement.ctx.rect(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
+    _domElement.ctx.fillText(face, boundingBox.x, boundingBox.y - 5);
+    _domElement.ctx.strokeStyle = 'green';
+    _domElement.ctx.stroke();
+  });
+}
+
+function showError(data) {
+  _domElement.errorWrapper.style.display = 'block';
+  _domElement.analyzisWrapper.style.display = 'none';
+  _domElement.error.innerHTML = data.message;
+}
+
+function showResponse(data) {
+  var response = data;
+  var error = isErrorInApi(response);
+  console.log(error);
+  if (!error) {
+    showAnalyzis(response);
+    showFaces(response);
+  } else {
+    showError(response);
   }
 }
 
