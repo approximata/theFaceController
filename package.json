@@ -4,6 +4,7 @@
   "description": "simple face recognation web app",
   "main": "script.js",
   "scripts": {
+    "start": "node server",
     "test": "ava --verbose"
   },
   "repository": {
