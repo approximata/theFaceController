@@ -233,10 +233,6 @@ function showError(data) {
   _domElement.error.innerHTML = data.message;
 }
 
-function activateButtom() {
-  _domElement.button.disabled = false;
-}
-
 function showResponse(data) {
   var response = data;
   var error = isErrorInApi(response);

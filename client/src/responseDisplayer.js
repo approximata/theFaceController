@@ -1,6 +1,6 @@
 'use strict'
 
-import {analyzis, analyzisWrapper, errorWrapper, error, canvas, ctx, button, enableButton} from './domElement.js'
+import {analyzis, analyzisWrapper, errorWrapper, error, canvas, ctx, enableButton} from './domElement.js'
 
 function isErrorInApi (data) {
   return data.message !== undefined
@@ -47,10 +47,6 @@ function showError (data) {
   errorWrapper.style.display = 'block'
   analyzisWrapper.style.display = 'none'
   error.innerHTML = data.message
-}
-
-function activateButtom () {
-  button.disabled = false
 }
 
 export function showResponse (data) {

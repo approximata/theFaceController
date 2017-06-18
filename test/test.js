@@ -6,7 +6,7 @@ import {dataURItoBlob} from '../client/src/converter.js'
 const cameraAllowed = '<div class="camera-allowed"><div class="video"><video></video><button></button></div></div>'
 const cameraDenied = '<div class="camera-denied"></div>'
 const nonCapable = '<div class="non-capable"><p>Please use Firefox or Chrome and be equipped by a webcam!</p></div>'
-const canvasDom = '<canvas></canvas>'
+const canvasDom = '<canvas class="canvas" height="180" width="320"></canvas>'
 
 test('evaluateEnviroment pass', t => {
   document.body.innerHTML = nonCapable
@@ -48,16 +48,14 @@ test('media stream handleError', t => {
   t.is(para.style.display, 'block')
 })
 
-// test('dataURItoBlob', t => {
-//   document.body.innerHTML = canvasDom
-//   const canvas = document.querySelector('canvas')
-//   canvas.width = 5
-//   canvas.height = 5
-//   console.log(canvas);
-//   const ctx = canvas.getContext('2d')
-//   ctx.fillRect(0, 0, 5, 5)
-//   const uri = canvas.toDataURL()
-//   const blob = dataURItoBlob(uri)
-//   const type = {}.toString.call(blob)
-//   t.deepEqual('[object Blob]', type)
-// })
+test('dataURItoBlob', t => {
+  document.body.innerHTML = canvasDom
+  const canvas = document.querySelector('.canvas')
+  canvas.width = 5
+  canvas.height = 5
+  canvas.getContext('2d').fillRect(0, 0, 5, 5)
+  const uri = canvas.toDataURL()
+  const blob = dataURItoBlob(uri)
+  const type = {}.toString.call(blob)
+  t.deepEqual('[object Blob]', type)
+})
