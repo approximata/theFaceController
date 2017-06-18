@@ -67,6 +67,8 @@ function dataURItoBlob(dataURI) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.disableButton = disableButton;
+exports.enableButton = enableButton;
 var video = exports.video = document.querySelector('video');
 var canvas = exports.canvas = window.canvas = document.querySelector('canvas');
 var ctx = exports.ctx = canvas.getContext('2d');
@@ -78,6 +80,16 @@ var analyzis = exports.analyzis = document.querySelector('.analyzis');
 
 var errorWrapper = exports.errorWrapper = document.querySelector('.error-wrapper');
 var error = exports.error = document.querySelector('.error');
+
+function disableButton() {
+  button.classList.add('disabled');
+  button.disabled = true;
+}
+
+function enableButton() {
+  button.classList.remove('disabled');
+  button.disabled = false;
+}
 
 },{}],5:[function(require,module,exports){
 'use strict';
@@ -145,6 +157,7 @@ _domElement.button.onclick = function () {
   var img = (0, _photoCreator.createImg)();
   var blob = (0, _converter.dataURItoBlob)(img);
   (0, _connection.connectApi)(_responseDisplayer.showResponse, blob);
+  (0, _domElement.disableButton)();
 };
 
 },{"./config.js":1,"./connection.js":2,"./converter.js":3,"./domElement.js":4,"./evaluator.js":5,"./photoCreator.js":7,"./responseDisplayer.js":8,"./setupEnviroment.js":9}],7:[function(require,module,exports){
@@ -186,6 +199,8 @@ function showAnalyzis(data) {
   _domElement.analyzisWrapper.style.display = 'block';
   _domElement.errorWrapper.style.display = 'none';
   _domElement.analyzis.innerHTML = '';
+  _domElement.analyzis.innerHTML += 'Number of faces: ' + data.length + '\n' + '---------------------' + '\n';
+
   Object.keys(data).forEach(function (face) {
     _domElement.analyzis.innerHTML += 'face: ' + face + '\n' + 'gender: ' + data[face].Gender.Value + '\n' + 'ageRange: ' + data[face].AgeRange.Low + ' - ' + data[face].AgeRange.High + '\n' + '---------------------' + '\n';
   });
@@ -203,11 +218,11 @@ function showFaces(data) {
     boundingBox.y = data[face].BoundingBox.Top * _domElement.canvas.height;
     boundingBox.width = data[face].BoundingBox.Width * _domElement.canvas.width;
     boundingBox.height = data[face].BoundingBox.Height * _domElement.canvas.height;
-    _domElement.ctx.font = '15px Arial';
-    _domElement.ctx.fillStyle = 'green';
+    _domElement.ctx.font = '15px tahoma';
+    _domElement.ctx.fillStyle = '#56BB68';
     _domElement.ctx.rect(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height);
-    _domElement.ctx.fillText(face, boundingBox.x, boundingBox.y - 5);
-    _domElement.ctx.strokeStyle = 'green';
+    _domElement.ctx.fillText('face: ' + face, boundingBox.x, boundingBox.y - 5);
+    _domElement.ctx.strokeStyle = '#56BB68';
     _domElement.ctx.stroke();
   });
 }
@@ -216,6 +231,10 @@ function showError(data) {
   _domElement.errorWrapper.style.display = 'block';
   _domElement.analyzisWrapper.style.display = 'none';
   _domElement.error.innerHTML = data.message;
+}
+
+function activateButtom() {
+  _domElement.button.disabled = false;
 }
 
 function showResponse(data) {
@@ -231,6 +250,7 @@ function showResponse(data) {
   } else {
     showError(response);
   }
+  (0, _domElement.enableButton)();
 }
 
 },{"./domElement.js":4}],9:[function(require,module,exports){

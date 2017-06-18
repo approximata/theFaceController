@@ -10,3 +10,13 @@ export const analyzis = document.querySelector('.analyzis')
 
 export const errorWrapper = document.querySelector('.error-wrapper')
 export const error = document.querySelector('.error')
+
+export function disableButton () {
+  button.classList.add('disabled')
+  button.disabled = true
+}
+
+export function enableButton () {
+  button.classList.remove('disabled')
+  button.disabled = false
+}

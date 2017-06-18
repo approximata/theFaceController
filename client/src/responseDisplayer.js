@@ -1,6 +1,6 @@
 'use strict'
 
-import {analyzis, analyzisWrapper, errorWrapper, error, canvas, ctx} from './domElement.js'
+import {analyzis, analyzisWrapper, errorWrapper, error, canvas, ctx, button, enableButton} from './domElement.js'
 
 function isErrorInApi (data) {
   return data.message !== undefined
@@ -10,6 +10,9 @@ function showAnalyzis (data) {
   analyzisWrapper.style.display = 'block'
   errorWrapper.style.display = 'none'
   analyzis.innerHTML = ''
+  analyzis.innerHTML += 'Number of faces: ' + data.length + '\n' +
+  '---------------------' + '\n'
+
   Object.keys(data).forEach((face) => {
     analyzis.innerHTML +=
     'face: ' + face + '\n' +
@@ -31,11 +34,11 @@ function showFaces (data) {
     boundingBox.y = data[face].BoundingBox.Top * canvas.height
     boundingBox.width = data[face].BoundingBox.Width * canvas.width
     boundingBox.height = data[face].BoundingBox.Height * canvas.height
-    ctx.font = '15px Arial'
-    ctx.fillStyle = 'green'
+    ctx.font = '15px tahoma'
+    ctx.fillStyle = '#56BB68'
     ctx.rect(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height)
-    ctx.fillText(face, boundingBox.x, boundingBox.y - 5)
-    ctx.strokeStyle = 'green'
+    ctx.fillText('face: ' + face, boundingBox.x, boundingBox.y - 5)
+    ctx.strokeStyle = '#56BB68'
     ctx.stroke()
   })
 }
@@ -44,6 +47,10 @@ function showError (data) {
   errorWrapper.style.display = 'block'
   analyzisWrapper.style.display = 'none'
   error.innerHTML = data.message
+}
+
+function activateButtom () {
+  button.disabled = false
 }
 
 export function showResponse (data) {
@@ -61,4 +68,5 @@ export function showResponse (data) {
   else {
     showError(response)
   }
+  enableButton()
 }
