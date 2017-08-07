@@ -38,6 +38,7 @@ function connectApi(callback, blob) {
       error.response = response;
       throw error;
     }
+    console.log(response);
     callback(json);
   }).catch(function (ex) {
     console.log('Unhandled Error! ', ex);
@@ -192,7 +193,8 @@ exports.showResponse = showResponse;
 var _domElement = require('./domElement.js');
 
 function isErrorInApi(data) {
-  return data.message !== undefined;
+  var isError = data.message !== undefined;
+  return isError;
 }
 
 function showAnalyzis(data) {
@@ -233,12 +235,22 @@ function showError(data) {
   _domElement.error.innerHTML = data.message;
 }
 
+function showNoFace(data) {
+  _domElement.analyzisWrapper.style.display = 'block';
+  _domElement.errorWrapper.style.display = 'none';
+  _domElement.analyzis.innerHTML = data.noface;
+}
+
 function showResponse(data) {
   var response = data;
   var error = isErrorInApi(response);
+  console.log(data);
+  // console.log(response)
+
   if (!error) {
+    console.log(data.noface);
     if (data.noface) {
-      _domElement.analyzis.innerHTML = data.noface;
+      showNoFace(data);
     } else {
       showAnalyzis(response);
       showFaces(response);

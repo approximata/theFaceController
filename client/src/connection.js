@@ -16,6 +16,7 @@ export function connectApi (callback, blob) {
         error.response = response
         throw error
       }
+      console.log(response)
       callback(json)
     })
     .catch(function (ex) {

@@ -3,7 +3,8 @@
 import {analyzis, analyzisWrapper, errorWrapper, error, canvas, ctx, enableButton} from './domElement.js'
 
 function isErrorInApi (data) {
-  return data.message !== undefined
+  const isError = data.message !== undefined
+  return isError
 }
 
 function showAnalyzis (data) {
@@ -49,12 +50,22 @@ function showError (data) {
   error.innerHTML = data.message
 }
 
+function showNoFace (data) {
+  analyzisWrapper.style.display = 'block'
+  errorWrapper.style.display = 'none'
+  analyzis.innerHTML = data.noface
+}
+
 export function showResponse (data) {
   const response = data
   const error = isErrorInApi(response)
+  console.log(data);
+  // console.log(response)
+
   if (!error) {
+    console.log(data.noface);
     if (data.noface) {
-      analyzis.innerHTML = data.noface
+      showNoFace(data)
     }
     else {
       showAnalyzis(response)
